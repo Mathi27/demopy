@@ -1,25 +1,36 @@
+# .github/workflows/deploy.yml
+
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main  # Triggers on push to main
+    branches: [main]
+
+permissions:
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: .  # Upload all files from root
 
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v2
-      with:
-        path: '.'
+  deploy-to-pages:
+    needs: deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-    - name: Deploy to GitHub Pages
-      uses: actions/deploy-pages@v3
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
