@@ -1,5 +1,3 @@
-# .github/workflows/deploy.yml
-
 name: Deploy to GitHub Pages
 
 on:
@@ -15,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Upload artifact
+      - name: Upload site files
         uses: actions/upload-pages-artifact@v2
         with:
-          path: .  # Upload all files from root
+          path: .  # All files from root
 
   deploy-to-pages:
     needs: deploy
